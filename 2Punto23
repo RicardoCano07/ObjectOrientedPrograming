@@ -1,0 +1,200 @@
+2 punto 23 "Word Inspection"
+
+package pkg2punto23;
+
+import Wordinspection.WordInspection;
+import java.io.File;
+
+/**
+ *
+ * @author Gonorreitor
+ */
+public class Main {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        // TODO code application logic here
+
+        try {
+            File f = new File("src/wordList.txt");
+            WordInspection w = new WordInspection(f);
+            w.palindromes();
+            System.out.println("Las palabras que son palindromas: ");
+            for (String s : w.palindromes()) {
+                System.out.println(s);
+            }
+            System.out.println("Las palabras que contienen todas las vocales: ");
+            w.wordsWhichContainAllVowels();
+            for(String s2 : w.wordsWhichContainAllVowels()){
+                
+                System.out.println(s2);
+            }
+            System.out.println("Las palabras que terminan en L: ");
+            w.wordsEndingInL();
+            for(String s3: w.wordsEndingInL()){
+                
+                System.out.println(s3);
+            }
+            System.out.println("Las palabras que contienen Z: ");
+            w.wordsContainingZ();
+            for (String s4 : w.wordsContainingZ()){
+                
+                System.out.println(s4);
+            }
+
+        } catch (Exception e) {
+
+            System.out.println("File no found");
+
+        }
+
+    }
+    
+    
+    Package Wordinspection.
+    
+    package Wordinspection;
+
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ *
+ * @author Gonorreitor
+ */
+public class WordInspection {
+
+    private File f;
+
+    public WordInspection(File f) {
+
+        this.f = f;
+    }
+
+    public int wordCount() throws FileNotFoundException {
+
+        int cont = 0;
+
+        Scanner reader = new Scanner(f);
+
+        while (reader.hasNextLine()) {
+
+            cont++;
+
+        }
+
+        return cont;
+    }
+
+    public List<String> wordsContainingZ() throws FileNotFoundException {
+
+        List<String> l = new ArrayList<>();
+        String aux = "";
+        Scanner reader = new Scanner(f);
+
+        while (reader.hasNextLine()) {
+
+            aux = reader.nextLine();
+            if (aux.contains("z")) {
+
+                l.add(aux);
+
+            }
+        }
+        return l;
+    }
+
+    public List<String> wordsEndingInL() throws FileNotFoundException {
+
+        List<String> endl = new ArrayList<>();
+        String aux = "";
+        Scanner reader = new Scanner(f);
+
+        while (reader.hasNextLine()) {
+
+            aux = reader.nextLine();
+            if (aux.endsWith("l")) {
+
+                endl.add(aux);
+
+            }
+        }
+        return endl;
+        
+    }
+    public List<String> palindromes() throws FileNotFoundException{
+        
+     List<String> palindrome = new ArrayList<>();
+        String aux = "";
+        Scanner reader = new Scanner(f);
+
+        while (reader.hasNextLine()) {
+
+            aux = reader.nextLine();
+            String reverse =new StringBuffer(aux).reverse().toString();  //StringBuffer es un objeto que tiene más cualidades que un string, por eso usamos to string
+            if (aux.equalsIgnoreCase(reverse)) {
+
+                palindrome.add(aux);
+
+            }
+        }
+        return palindrome;
+    }
+    
+     public List<String> wordsWhichContainAllVowels() throws FileNotFoundException{
+         
+          List<String> vowel = new ArrayList<>();
+        String aux = "";
+        Scanner reader = new Scanner(f);
+
+        while (reader.hasNextLine()) {
+
+            aux = reader.nextLine();
+            if (aux.contains("a") && aux.contains("e") && aux.contains("i") && aux.contains("o") && aux.contains("u") && aux.contains("y") && aux.contains("ö") && aux.contains("ä")) {
+
+                vowel.add(aux);
+
+            }
+        }
+        return vowel;
+         
+     }
+}
+
+
+Package <Default>
+
+shortList 
+  Palindrome
+  casa
+  Sapo
+  Burro
+  Tacocat
+  asa
+  canción
+  zapato 
+  canibal
+  cazador
+  yöhäiselokuva
+  ympäristönsuojelija
+
+wordList
+  Palindrome
+  casa
+  Sapo
+  Burro
+  Tacocat
+  asa
+  canción
+  zapato 
+  canibal
+  cazador
+  yöhäiselokuva
+  ympäristönsuojelija
+    
