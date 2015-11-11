@@ -1,0 +1,247 @@
+package proyecto_maquina;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
+public class Proyecto_Maquina {
+
+    public static void main(String[] args) {
+        Clave();
+    }
+
+    public static void Clave() {
+        int[] clave = new int[4];
+        int cont = -1, sumaDeClaves = 0, modulo = 0;
+
+        while (cont != 3) {
+            String Numero = JOptionPane.showInputDialog(null,cont+1 + " Ingrese un numero entre 0 y 25");
+            int Clave = Integer.parseInt(Numero);
+
+            if (Clave >= 0 && Clave < 26) {
+
+                clave[cont + 1] = Clave;
+
+                cont++;
+                sumaDeClaves = Clave + sumaDeClaves;
+
+                if (cont == 2) {
+
+                    modulo = sumaDeClaves % 25;
+                    cont++;
+
+                    Rotores(modulo, cont, clave);
+                    //  Hace el modulo de la suma de las claves para no tener errores.
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null,"Numero no valido, Inetentelo nuevamente");
+                // Para que no dañe el programa
+            }
+        }
+    }
+
+    public static ArrayList generarMatriz() {
+        ArrayList<String> Matriz = new ArrayList<>();
+        try {
+            FileReader fr = new FileReader("/Users/Gonorreitor/Desktop/encriptacion.txt");
+            BufferedReader b = new BufferedReader(fr);
+            String cadena;
+
+            while ((cadena = b.readLine()) != null) {
+                Matriz.add(cadena);
+            }
+        } catch (Exception ex) {
+            System.out.println("El archivo esta daño");
+        }
+
+        return Matriz;
+    }
+
+    public static char[][] reflector() {
+        ArrayList<String> Matriz = new ArrayList<>();
+        Matriz = generarMatriz();
+        char[][] Reflector = new char[13][2];
+        String aux = " ";
+
+        aux = Matriz.get(0);
+        for (int i = 0; i < aux.length(); i++) {
+
+            char a = aux.charAt(i);
+            if (i < 13) {
+                Reflector[i][0] = a;
+            } else if (i >= 13) {
+                Reflector[i - 13][1] = a;
+            }
+        }
+
+        return Reflector;
+    }
+
+    public static void Rotores(int Clave, int contador, int[] clave) {
+
+        ArrayList<String> Matriz = new ArrayList<>();
+
+        char[][] Rotores = new char[26][3];
+
+        char[][] ParteUno = new char[26][2];
+
+        Matriz = generarMatriz();
+        String aux = " ";
+
+        aux = Matriz.get(clave[1]);
+
+        for (int i = 0; i < 26; i++) {
+            char a = aux.charAt(i);
+            Rotores[i][0] = a;
+        }
+
+        aux = Matriz.get(clave[0]);
+
+        for (int i = 0; i < 26; i++) {
+            char a = aux.charAt(i);
+            Rotores[i][1] = a;
+
+        }
+
+        aux = Matriz.get(clave[2]);
+
+        for (int i = 0; i < 26; i++) {
+            char a = aux.charAt(i);
+            Rotores[i][2] = a;
+
+        }
+
+        aux = Matriz.get(0);
+
+        for (int i = 0; i < 26; i++) {
+            char a = aux.charAt(i);
+            ParteUno[i][0] = a;
+        }
+
+        aux = Matriz.get(Clave);
+
+        for (int i = 0; i < 26; i++) {
+            char a = aux.charAt(i);
+            ParteUno[i][1] = a;
+
+        }
+
+        //Guarda el abecedario en la parte uno, y la suma de las claves.
+        procesoDeEncriptacion(Rotores, ParteUno);
+    }
+
+    public static String Palabara() {
+        String Texto = JOptionPane.showInputDialog(" Ingrese el texto a cifrar. ");
+        return Texto;
+    }
+
+    public static void procesoDeEncriptacion(char Rotores[][], char ParteUno[][]) {
+        
+        String incriptacion = " ";
+
+        char[][] Reflector = reflector();
+
+        String Palabra = Palabara();
+
+        int contador = 0;
+
+        for (int i = 0; i < Palabra.length(); i++) {
+
+            for (int j = 0; j < 26; j++) { //El for busca la posición de la letra en el vector paret uno
+
+                String a = "" + ParteUno[j][0];
+                String o = "" + Palabra.charAt(i);
+
+                if (a.equalsIgnoreCase(o)) {
+
+                    contador++;
+
+                    String letra = PasarPorRotores(Rotores, contador);
+                    for (int K = 0; K < 26; K++){
+                        String b = "" + ParteUno[K][1];
+                        if (b.equalsIgnoreCase(letra)){
+                            String variale = ""+ParteUno[K][0];
+                            incriptacion = incriptacion + variale;
+                        }
+                    }
+                    
+                    break;
+                }
+            }
+        }
+        JOptionPane.showMessageDialog(null, incriptacion);
+
+    }
+
+    public static String PasarPorRotores(char Rotores[][], int contador) {
+        String letra = " ";
+
+        GirarRotoresIzq(Rotores, 0);
+
+        if (contador % 2 == 0 && contador >= 2) {
+            Rotores = GirarRotoresDer(Rotores);
+        } else if (contador % 4 == 0 && contador >= 4) {
+            Rotores = GirarRotoresIzq(Rotores, 2);
+        }
+        
+        // AQUI HACE EL REFLECTOR 
+        GirarRotoresIzq(Rotores, 0);
+        GirarRotoresIzq(Rotores, 0);
+        
+        if (contador % 2 == 0 && contador >= 2) {
+            Rotores = GirarRotoresDer(Rotores);
+        } else if (contador % 4 == 0 && contador >= 4) {
+            Rotores = GirarRotoresIzq(Rotores, 2);
+        }
+        //gira los rotores. 
+        letra = ""+(Rotores[1][0]);//aqui guarda la letra luego de girar rotor 1 letra 2 
+        // guarda la letra en la posion donde termineel rotor.*/
+        return letra;
+    }
+
+    public static char[][] GirarRotoresIzq(char Rotores[][], int j) {
+
+        char Espacio = Rotores[0][0];
+
+        for (int i = 1; i < 26; i++) {
+            Rotores[i - 1][j] = Rotores[i][j];
+        }
+
+        Rotores[25][0] = Espacio;
+
+        return Rotores;
+
+    }
+
+    public static char[][] GirarRotoresDer(char Rotores[][]) {
+
+        char Espacio = Rotores[25][1];
+
+        for (int i = 0; i < 25; i++) {
+            Rotores[i + 1][1] = Rotores[i][1];
+        }
+
+        Rotores[0][1] = Espacio;
+        return Rotores;
+    }
+
+    public static char[][] BuscarLetra(char letra, char[][] vector, int j, int auxs) {
+
+        char[][] aux = new char[j][auxs];
+        for (int i = 0; i > j; i++) {
+
+            if (letra == vector[i][0]) {
+                aux[i][1] = vector[i][0];
+                break;
+            } else if (letra == vector[i][1]) {
+                aux[i][0] = vector[i][1];
+                break;
+            }
+        }
+        return aux;
+    }
+    
+
+}
