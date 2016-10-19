@@ -1,0 +1,36 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+G = 6.6738e-11
+M = 1.9e30
+mass = 6.4185e23
+velocity = 24.077*1000
+mean_r = 227939100*1000
+
+L = (mass*velocity)*mean_r
+
+#print ("Momento angular= ",L)
+K = G*M
+
+#print ("KKKKK=",K)
+E = ((mass*(velocity**2))/2.+(K/mean_r))
+
+#print ("Energía ",E)
+angle = np.linspace(0, 2*np.pi, 1000)
+
+#print ("Angulo",angle)
+eccentricity =0.093315
+
+#print ("excentricidad", eccentricity)
+	
+P= (L**2)/(mass*K)
+r=[]
+r=P/(1+(eccentricity*np.cos(angle)))
+dr=(-P*eccentricity*np.sin(angle))/(1+eccentricity*np.cos(angle))**2	
+#print (dr)	
+plt.polar(angle,r)
+
+#plt.polar(angle,dr)
+
+plt.show()
